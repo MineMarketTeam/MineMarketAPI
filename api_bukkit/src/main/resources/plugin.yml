@@ -1,0 +1,7 @@
+name: MineMarketBukkit
+main: com.minemarket.api.MineMarketBukkit
+author: SAM_XPS
+load: startup
+version: 1.1
+commands:
+  minemarket:
