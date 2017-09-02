@@ -49,6 +49,11 @@ public class MineMarketCommand implements CommandExecutor{
 							message += "\n" + ChatColor.WHITE + "KEY da API: " + ChatColor.AQUA + api.getKey();
 							message += "\n" + ChatColor.WHITE + "Commandos pendentes: " + ChatColor.GOLD + api.getPendingCommands().size();
 							break;
+						case WRONG_SERVER_TYPE:
+							message = ChatColor.RED + "Configuracao Necessaria";
+							message += "\n" + ChatColor.RED + "Acesse o painel e altere o tipo de servidor para: BUKKIT";
+							message += "\n" + ChatColor.RED + "(ou) Crie uma nova key do tipo BUKKIT";
+							break;
 						case INVALID_KEY:
 							message = ChatColor.RED + "Key Invalida";
 							message += "\n" + ChatColor.WHITE + "Mude sua key utilizando: " + ChatColor.GOLD + "/" + label + " setkey";

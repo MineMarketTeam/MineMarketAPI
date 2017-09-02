@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-import com.minemarket.api.MineMarketBaseAPI.APIStatus;
 import com.minemarket.api.commands.MineMarketCommand;
 import com.minemarket.api.types.CommandType;
 import com.minemarket.api.types.PendingCommand;
@@ -43,7 +42,7 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 	public boolean loadAPI(){
 		scheduler.cancelTasks();
 		if (loadConfig() && validateConfig()){
-			api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", "1.1", configuration.getString("key"), scheduler, instance, new BungeeUpdater());
+			api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", "1.1", "BUNGEE", configuration.getString("key"), scheduler, instance, new BungeeUpdater());
 			api.initialize();
 			return true;
 		}
@@ -94,7 +93,7 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 
 	public boolean executeCommand(PendingCommand command) {
 		String cmd = getCommandLine(command);
-		CommandSender sender = command.getCommandType() == CommandType.CONSOLE ? getProxy().getConsole() : (command.getPlayerUUID() == null ? getProxy().getPlayer(command.getPlayerName()) : getProxy().getPlayer(command.getPlayerUUID()));
+		CommandSender sender = command.getCommandType() == CommandType.CONSOLE || !command.isRequireOnline() ? getProxy().getConsole() : (command.getPlayerUUID() == null ? getProxy().getPlayer(command.getPlayerName()) : getProxy().getPlayer(command.getPlayerUUID()));
 		getProxy().getPluginManager().dispatchCommand(sender, cmd);
 		return true;
 	}

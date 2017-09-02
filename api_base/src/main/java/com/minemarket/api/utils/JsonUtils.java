@@ -41,7 +41,7 @@ public class JsonUtils {
 	
 	public static JSONResponse loadResponse(JSONObject obj) throws JSONException{
 		KeyStatus ks = KeyStatus.getByName(obj.getString("key_status"));		
-		return new JSONResponse(ks, obj.optJSONObject("data"), obj.optJSONArray("errors"));
+		return new JSONResponse(ks, obj.getString("server_type"), obj.optJSONObject("data"), obj.optJSONArray("errors"));
 	}
 	
 	public static JSONResponse createResponse(String source) throws JSONException{

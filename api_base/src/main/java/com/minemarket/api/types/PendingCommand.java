@@ -16,6 +16,7 @@ public class PendingCommand {
 	private CommandType commandType;
 	private String commandLine;
 	private String custom;
+	private boolean requireOnline;
 	
 	private static UUID parseUUID(String input){
 		if (input == null || input.length() == 0)
@@ -24,7 +25,7 @@ public class PendingCommand {
 	}
 	
 	public static PendingCommand fromJSON(JSONObject j){
-		return new PendingCommand(j.getInt("ID"), parseUUID(j.getString("UUID")), j.getString("NICK"), CommandType.getByID(j.getInt("TYPE")), j.getString("COMMAND"), j.getString("CUSTOM"));
+		return new PendingCommand(j.getInt("ID"), parseUUID(j.getString("UUID")), j.getString("NICK"), CommandType.getByID(j.getInt("TYPE")), j.getString("COMMAND"), j.getString("CUSTOM"), j.getBoolean("REQUIRE_ONLINE"));
 	}
 
 }

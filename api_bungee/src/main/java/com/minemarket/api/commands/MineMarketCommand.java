@@ -57,6 +57,11 @@ public class MineMarketCommand extends Command {
 							message += "\n" + ChatColor.WHITE + "Commandos pendentes: " + ChatColor.GOLD
 									+ api.getPendingCommands().size();
 							break;
+						case WRONG_SERVER_TYPE:
+							message = ChatColor.RED + "Configuracao Necessaria";
+							message += "\n" + ChatColor.RED + "Acesse o painel e altere o tipo de servidor para: BUKKIT";
+							message += "\n" + ChatColor.RED + "(ou) Crie uma nova key do tipo BUKKIT";
+							break;
 						case INVALID_KEY:
 							message = ChatColor.RED + "Key Invalida";
 							message += "\n" + ChatColor.WHITE + "Mude sua key utilizando: " + ChatColor.GOLD + "/"

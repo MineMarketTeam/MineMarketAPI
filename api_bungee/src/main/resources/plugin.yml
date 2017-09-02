@@ -1,0 +1,5 @@
+name: MineMarketBungee
+main: com.minemarket.api.MineMarketBungee
+version: 1.2
+author: SAM_XPS
+description: Plugin de integracao para lojas minemarket

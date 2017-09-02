@@ -11,8 +11,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class JSONResponse {
-
+	
 	private KeyStatus keyStatus;
+	private String serverType;
 	private JSONObject data;
 	private JSONArray errors;
 	

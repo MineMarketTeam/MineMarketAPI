@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.minemarket.api.exceptions.AfterExecutionCommandUpdateFailureException;
+import com.minemarket.api.types.ConnectionStatus;
 import com.minemarket.api.types.KeyStatus;
 import com.minemarket.api.types.PendingCommand;
 import com.minemarket.api.utils.HttpUtils;
@@ -33,18 +34,19 @@ public class MineMarketBaseAPI {
 	private final String apiURL;
 	private final String key;
 	private final String version;
+	private final String serverType;
 	private final BaseTaskScheduler scheduler;
 	private final BaseCommandExecutor commandExecutor;
 	private final BaseUpdater updater;
 	private ArrayList<PendingCommand> pendingCommands;
-	private APIStatus status;
+	private ConnectionStatus status;
 	private boolean updateAvailable = false;
 	
 	/**
 	 * Metódo que inicializa a conexão com a API, e retorna o status da tentativa.
-	 * @return {@link APIStatus} o status da conexão.
+	 * @return {@link ConnectionStatus} o status da conexão.
 	 */
-	public APIStatus initialize(){
+	public ConnectionStatus initialize(){
 		JSONResponse response = null;
 		try {
 			response = loadResponse("api_status", getKeyData());
@@ -55,41 +57,48 @@ public class MineMarketBaseAPI {
 		}
 		if (response != null){
 			if (response.getKeyStatus() == KeyStatus.VALID){
-				
-				loadPendingCommands();
-				
-				System.out.println(prefix + " Sistema iniciado, você está utilizando a versão " + version);
-				scheduler.scheduleAsyncRepeatingTask(new Runnable() {
+				if (response.getServerType().equalsIgnoreCase(this.serverType)){
 					
-					@Override
-					public void run() {
-						loadPendingCommands();
+					loadPendingCommands();
+					
+					System.out.println(prefix + " Sistema iniciado. Versão atual: " + version);
+					
+					scheduler.scheduleAsyncRepeatingTask(new Runnable() {
+						
+						@Override
+						public void run() {
+							loadPendingCommands();
+						}
+					}, 60, 60);
+					
+					if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
+						System.out.println(prefix + "Você está usando uma versão desatualizada! por favor baixe a versão " + response.getData().getString("CURRENT_VERSION"));
+						updateAvailable = true;
 					}
-				}, 60, 60);
-				
-				if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
-					System.out.println(prefix + "Você está usando uma versão desatualizada! por favor baixe a versão " + response.getData().getString("CURRENT_VERSION"));
-					updateAvailable = true;
+
+					status = ConnectionStatus.OK;
+				} else {
+					System.out.println(prefix + "Sistema nao foi inicializado porque sua key não está configurada para servidores " + this.serverType);
+					System.out.println(prefix + "Por favor, crie uma nova key " + this.serverType + " no painel.");
+					status = ConnectionStatus.WRONG_SERVER_TYPE;
 				}
-				
-				status = APIStatus.OK;
 			} else if (response.getKeyStatus() == KeyStatus.BLOCKED){
 				System.out.println(prefix + "Sistema nao foi inicializado porque sua key foi bloqueada! "
 						+ "Entre no painel e desbloqueie a conexao deste ip com a API.");
-				status = APIStatus.BLOCKED_IP;
+				status = ConnectionStatus.BLOCKED_IP;
 			} else if (response.getKeyStatus() == KeyStatus.WAITING_VALIDATION){
 				System.out.println(prefix + "Sistema nao foi inicializado porque sua key ainda nao foi validada! "
 						+ "Entre no painel e permita esse ip se conectar com a API.");
-				status = APIStatus.UNCONFIRMED_IP;
+				status = ConnectionStatus.UNCONFIRMED_IP;
 			} else if (response.getKeyStatus() == KeyStatus.INVALID || response.getKeyStatus() == KeyStatus.UNKNOWN) {
 				System.out.println(prefix + "Sistema nao foi inicializado porque sua key é inválida. "
 						+ "Por favor, verifique-a em suas configuracoes.");
-				status = APIStatus.INVALID_KEY;
+				status = ConnectionStatus.INVALID_KEY;
 			}
 		} else {
 			System.out.println(prefix + "Sistema nao foi inicializado devido a falha de conexao.");
 			System.out.println(prefix + "Verifique os erros no console e a URL da API nas suas configuracoes.");
-			status = APIStatus.CONNECTION_ERROR;
+			status = ConnectionStatus.CONNECTION_ERROR;
 		}
 		return status;
 	}
@@ -124,7 +133,7 @@ public class MineMarketBaseAPI {
 	
 	public synchronized void verifyPendingCommands(UUID uuid, String name) throws AfterExecutionCommandUpdateFailureException{
 		for (PendingCommand pc : new ArrayList<>(getPendingCommands())){
-			if (((pc.getPlayerUUID() == null && pc.getPlayerName().equalsIgnoreCase(name)) || uuid.equals(pc.getPlayerUUID())) && commandExecutor.executeCommand(pc)){
+			if ((!pc.isRequireOnline() || (pc.getPlayerUUID() == null && pc.getPlayerName().equalsIgnoreCase(name)) || uuid.equals(pc.getPlayerUUID())) && commandExecutor.executeCommand(pc)){
 				if (!updateCommandInfo(pc.getCommandID())){
 					throw new AfterExecutionCommandUpdateFailureException(pc);
 				}
@@ -166,32 +175,6 @@ public class MineMarketBaseAPI {
 
 	public String getKeyData(){
 		return "key=" + this.key;
-	}
-	
-	/**
-	 * Todos os STATUS possíveis para a conexão com a API.
-	 */
-	public enum APIStatus {
-		/**
-		 * A conexão foi bem sucedida e a key é válida.
-		 */
-		OK,
-		/**
-		 * A key utilizada é inválida.
-		 */
-		INVALID_KEY,
-		/**
-		 * O IP utilizado para a conexão foi bloqueado para esta key.
-		 */
-		BLOCKED_IP, 
-		/**
-		 * O IP utilizado ainda não foi autorizado.
-		 */
-		UNCONFIRMED_IP, 
-		/**
-		 * Um erro ocorreu ao se conectar com a API.
-		 */
-		CONNECTION_ERROR, 
 	}
 	
 }

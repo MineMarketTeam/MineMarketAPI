@@ -3,7 +3,7 @@ package com.minemarket.api;
 import com.minemarket.api.BaseCommandExecutor;
 import com.minemarket.api.BaseTaskScheduler;
 import com.minemarket.api.MineMarketBaseAPI;
-import com.minemarket.api.MineMarketBaseAPI.APIStatus;
+import com.minemarket.api.types.ConnectionStatus;
 import com.minemarket.api.types.PendingCommand;
 
 public class Test implements BaseCommandExecutor, BaseTaskScheduler{
@@ -46,13 +46,13 @@ public class Test implements BaseCommandExecutor, BaseTaskScheduler{
 	}
 	
 	public void testar(){
-		MineMarketBaseAPI api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", "TEST-KEY", "1.1", this, this, new BaseUpdater() {			
+		MineMarketBaseAPI api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", "TEST-KEY", "1.1", "TEST", this, this, new BaseUpdater() {			
 			@Override
 			public void update() {
 				System.out.println("uma tentativa de update foi realizada.");
 			}
 		});
-		if (api.initialize() == APIStatus.OK){
+		if (api.initialize() == ConnectionStatus.OK){
 			System.out.println("yay-");
 			api.loadPendingCommands();
 		} else {

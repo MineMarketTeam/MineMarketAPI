@@ -14,10 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.Getter;
-import com.minemarket.api.MineMarketBaseAPI.APIStatus;
 import com.minemarket.api.commands.MineMarketCommand;
 import com.minemarket.api.exceptions.MineMarketException;
 import com.minemarket.api.types.CommandType;
+import com.minemarket.api.types.ConnectionStatus;
 import com.minemarket.api.types.PendingCommand;
 
 @Getter
@@ -40,13 +40,13 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 		scheduler.cancelTasks();
 		FileConfiguration config = getConfig();
 		validateConfig(config);
-		api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", config.getString("key"), this.getDescription().getVersion(), scheduler, instance, new BukkitUpdater());
+		api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", config.getString("key"), this.getDescription().getVersion(), "BUKKIT", scheduler, instance, new BukkitUpdater());
 		api.initialize();
 	}
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event){
-		if (api.getStatus() == APIStatus.OK){
+		if (api.getStatus() == ConnectionStatus.OK){
 			api.onPlayerJoin(event.getPlayer().getUniqueId(), event.getPlayer().getName());
 		}
 		if (event.getPlayer().hasPermission("minemarket.configure")){
@@ -54,7 +54,7 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 					
 					@Override
 					public void run() {
-						if (api.getStatus() != APIStatus.OK){
+						if (api.getStatus() != ConnectionStatus.OK){
 							event.getPlayer().sendMessage("====================");
 							event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "[!] Por favor verifique as seguintes informacoes:");
 							getServer().dispatchCommand(event.getPlayer(), "minemarket info");			
@@ -79,7 +79,7 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 
 	public boolean executeCommand(PendingCommand command) {
 		String cmd = getCommandLine(command);
-		CommandSender sender = command.getCommandType() == CommandType.CONSOLE ? Bukkit.getConsoleSender() : (command.getPlayerUUID() == null ? Bukkit.getPlayer(command.getPlayerName()) : Bukkit.getPlayer(command.getPlayerUUID()));
+		CommandSender sender = (command.getCommandType() == CommandType.CONSOLE || !command.isRequireOnline()) ? Bukkit.getConsoleSender() : (command.getPlayerUUID() == null ? Bukkit.getPlayer(command.getPlayerName()) : Bukkit.getPlayer(command.getPlayerUUID()));
 		if (command.getCommandType() == CommandType.OP){
 			boolean op = sender.isOp();
 			sender.setOp(true);

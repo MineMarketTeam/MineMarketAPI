@@ -1,4 +1,4 @@
-# Base da API MineMarket
+# API MineMarket para Bukkit
 
 Este projeto consiste na conexão com os servidores minemarket via HTTP para carregar os comandos pendentes que devem ser rodados para a ativação ou remoção de produtos comprados.
 
