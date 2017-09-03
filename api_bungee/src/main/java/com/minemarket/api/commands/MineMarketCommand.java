@@ -59,8 +59,8 @@ public class MineMarketCommand extends Command {
 							break;
 						case WRONG_SERVER_TYPE:
 							message = ChatColor.RED + "Configuracao Necessaria";
-							message += "\n" + ChatColor.RED + "Acesse o painel e altere o tipo de servidor para: BUKKIT";
-							message += "\n" + ChatColor.RED + "(ou) Crie uma nova key do tipo BUKKIT";
+							message += "\n" + ChatColor.RED + "Acesse o painel e altere o tipo de servidor para: BUNGEE";
+							message += "\n" + ChatColor.RED + "(ou) Crie uma nova key do tipo BUNGEE";
 							break;
 						case INVALID_KEY:
 							message = ChatColor.RED + "Key Invalida";
