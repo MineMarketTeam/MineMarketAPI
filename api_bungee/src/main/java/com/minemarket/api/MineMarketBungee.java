@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.UUID;
 
 import com.minemarket.api.commands.MineMarketCommand;
 import com.minemarket.api.types.CommandType;
@@ -14,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -42,7 +44,8 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 	public boolean loadAPI(){
 		scheduler.cancelTasks();
 		if (loadConfig() && validateConfig()){
-			api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", "1.1", "BUNGEE", configuration.getString("key"), scheduler, instance, new BungeeUpdater());
+			System.out.println(configuration.getString("key"));
+			api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", configuration.getString("key"),  "1.2", "BUNGEE", scheduler, instance, new BungeeUpdater());
 			api.initialize();
 			return true;
 		}
@@ -84,7 +87,7 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 	}
 
 	private boolean validateConfig(){
-		if (configuration.getString("") == null){
+		if (configuration.getString("key") == null){
 			configuration.set("key", "");
 			return saveConfig();
 		} 
@@ -94,8 +97,19 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 	public boolean executeCommand(PendingCommand command) {
 		String cmd = getCommandLine(command);
 		CommandSender sender = command.getCommandType() == CommandType.CONSOLE || !command.isRequireOnline() ? getProxy().getConsole() : (command.getPlayerUUID() == null ? getProxy().getPlayer(command.getPlayerName()) : getProxy().getPlayer(command.getPlayerUUID()));
-		getProxy().getPluginManager().dispatchCommand(sender, cmd);
-		return true;
+		return getProxy().getPluginManager().dispatchCommand(sender, cmd);
+	}
+
+	@Override
+	public boolean isPlayerOnline(UUID uuid) {
+		ProxiedPlayer player;
+		return (player = getProxy().getPlayer(uuid)) != null && player.isConnected();
+	}
+
+	@Override
+	public boolean isPlayerOnline(String name){
+		ProxiedPlayer player;
+		return (player = getProxy().getPlayer(name)) != null && player.isConnected();
 	}
 	
 }

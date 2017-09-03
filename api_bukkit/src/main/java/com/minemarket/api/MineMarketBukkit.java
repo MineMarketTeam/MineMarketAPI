@@ -1,5 +1,7 @@
 package com.minemarket.api;
 
+import java.util.UUID;
+
 import javax.xml.transform.OutputKeys;
 
 import org.bukkit.Bukkit;
@@ -7,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -77,9 +80,10 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 			config.set("key", "");
 	}
 
+	@Override
 	public boolean executeCommand(PendingCommand command) {
 		String cmd = getCommandLine(command);
-		CommandSender sender = (command.getCommandType() == CommandType.CONSOLE || !command.isRequireOnline()) ? Bukkit.getConsoleSender() : (command.getPlayerUUID() == null ? Bukkit.getPlayer(command.getPlayerName()) : Bukkit.getPlayer(command.getPlayerUUID()));
+		CommandSender sender = command.getCommandType() == CommandType.CONSOLE || !command.isRequireOnline() ? Bukkit.getConsoleSender() : (command.getPlayerUUID() == null ? Bukkit.getPlayer(command.getPlayerName()) : Bukkit.getPlayer(command.getPlayerUUID()));
 		if (command.getCommandType() == CommandType.OP){
 			boolean op = sender.isOp();
 			sender.setOp(true);
@@ -89,6 +93,18 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 			Bukkit.dispatchCommand(sender, cmd);
 		}
 		return true;
+	}
+
+	@Override
+	public boolean isPlayerOnline(UUID uuid) {
+		Player player;
+		return (player = Bukkit.getPlayer(uuid)) != null && player.isOnline();
+	}
+
+	@Override
+	public boolean isPlayerOnline(String name) {
+		Player player;
+		return (player = Bukkit.getPlayer(name)) != null && player.isOnline();
 	}
 	
 }

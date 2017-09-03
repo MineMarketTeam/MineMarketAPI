@@ -1,5 +1,7 @@
 package com.minemarket.api;
 
+import java.util.UUID;
+
 import com.minemarket.api.BaseCommandExecutor;
 import com.minemarket.api.BaseTaskScheduler;
 import com.minemarket.api.MineMarketBaseAPI;
@@ -68,7 +70,18 @@ public class Test implements BaseCommandExecutor, BaseTaskScheduler{
 	@Override
 	public void cancelTasks() {
 		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	public boolean isPlayerOnline(UUID uuid) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isPlayerOnline(String name) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

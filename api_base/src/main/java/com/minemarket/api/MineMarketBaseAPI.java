@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -128,18 +129,50 @@ public class MineMarketBaseAPI {
 		JSONResponse response;
 		if (verifyResponse(response = getResponse("pending_commands", getKeyData()))){
 			pendingCommands = JsonUtils.loadPendingCommands(response);
+			
+			scheduler.runTaskAsynchronously(new Runnable() {
+				@Override
+				public void run() {
+					List<PendingCommand> runCommands = new ArrayList<>();
+					
+					for (PendingCommand pc : pendingCommands){
+						try{
+							if (!pc.isRequireOnline() || commandExecutor.isPlayerOnline(pc.getPlayerUUID(), pc.getPlayerName())){
+								if (commandExecutor.executeCommand(pc)){
+									runCommands.add(pc);
+								}
+							}
+						} catch (Exception e){
+							e.printStackTrace();
+						}
+					}
+					
+					for (PendingCommand pc : runCommands){
+						try {
+							handleRunCommand(pc);
+						} catch (AfterExecutionCommandUpdateFailureException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+			
 		}
 	}
 	
 	public synchronized void verifyPendingCommands(UUID uuid, String name) throws AfterExecutionCommandUpdateFailureException{
 		for (PendingCommand pc : new ArrayList<>(getPendingCommands())){
-			if ((!pc.isRequireOnline() || (pc.getPlayerUUID() == null && pc.getPlayerName().equalsIgnoreCase(name)) || uuid.equals(pc.getPlayerUUID())) && commandExecutor.executeCommand(pc)){
-				if (!updateCommandInfo(pc.getCommandID())){
-					throw new AfterExecutionCommandUpdateFailureException(pc);
-				}
-				pendingCommands.remove(pc);
+			if (((pc.getPlayerUUID() == null && pc.getPlayerName().equalsIgnoreCase(name)) || uuid.equals(pc.getPlayerUUID())) && commandExecutor.executeCommand(pc)){
+				handleRunCommand(pc);
 			}
 		}
+	}
+	
+	public synchronized void handleRunCommand(PendingCommand pc) throws AfterExecutionCommandUpdateFailureException{
+		if (!updateCommandInfo(pc.getCommandID())){
+			throw new AfterExecutionCommandUpdateFailureException(pc);
+		}
+		pendingCommands.remove(pc);
 	}
 	
 	private boolean verifyResponse(JSONResponse jr){

@@ -1,5 +1,7 @@
 package com.minemarket.api;
 
+import java.util.UUID;
+
 import com.minemarket.api.types.PendingCommand;
 
 /**
@@ -14,7 +16,7 @@ public interface BaseCommandExecutor {
 	 */
 	public default String getCommandLine(PendingCommand command){
 		String cmd = command.getCommandLine();
-		String[] playerNameAlias = new String[] {"%name%", "%nick%", "%player%"}; // Lista de aliases para a variável do nome do jogador.
+		String[] playerNameAlias = new String[] {"%name%", "%nick%", "%player%", "%nickname%"}; // Lista de aliases para a variável do nome do jogador.
 		
 		for (String alias : playerNameAlias)
 			cmd = cmd.replaceAll(alias, command.getPlayerName());
@@ -33,5 +35,13 @@ public interface BaseCommandExecutor {
 	 * <b>false</b> Caso ocorra alguma falha durante a execução
 	 */
 	public abstract boolean executeCommand(PendingCommand command);
+	
+	public abstract boolean isPlayerOnline(UUID uuid);
+
+	public abstract boolean isPlayerOnline(String name);
+	
+	public default boolean isPlayerOnline(UUID uuid, String name){
+		return uuid == null ? isPlayerOnline(name) : isPlayerOnline(uuid);
+	}
 	
 }

@@ -36,7 +36,7 @@ public class MineMarketCommand extends Command {
 						MineMarketBungee.getInstance().getConfiguration().set("key", key);
 						MineMarketBungee.getInstance().saveConfig();
 						sender.sendMessage(ChatColor.GOLD + "Key atualizada para: " + ChatColor.GREEN + key);
-						sender.sendMessage(ChatColor.YELLOW + "Digite " + ChatColor.GOLD + "/MineMarket reload"
+						sender.sendMessage(ChatColor.YELLOW + "Digite " + ChatColor.GOLD + "/gMineMarket reload"
 								+ ChatColor.YELLOW + " para carregar as alterações.");
 					}
 					return;
@@ -97,13 +97,13 @@ public class MineMarketCommand extends Command {
 			}
 
 			sender.sendMessage("===========================");
-			sender.sendMessage(ChatColor.GOLD + "Ajuda - MineMarket");
+			sender.sendMessage(ChatColor.GOLD + "Ajuda - MineMarket (BungeeCord)");
 			sender.sendMessage(ChatColor.AQUA + "Subcomandos disponíveis:");
 			sender.sendMessage("");
-			sender.sendMessage(ChatColor.GREEN + "/MineMarket setkey <key>" + ChatColor.WHITE
+			sender.sendMessage(ChatColor.GREEN + "/gMineMarket setkey <key>" + ChatColor.WHITE
 					+ " - Use para configurar a KEY de acesso à API.");
-			sender.sendMessage(ChatColor.GREEN + "/MineMarket info" + ChatColor.WHITE + " - Veja o status do sistema.");
-			sender.sendMessage(ChatColor.GREEN + "/MineMarket reload" + ChatColor.WHITE
+			sender.sendMessage(ChatColor.GREEN + "/gMineMarket info" + ChatColor.WHITE + " - Veja o status do sistema.");
+			sender.sendMessage(ChatColor.GREEN + "/gMineMarket reload" + ChatColor.WHITE
 					+ " - Recarrega as configurações do sistema.");
 			sender.sendMessage("===========================");
 
