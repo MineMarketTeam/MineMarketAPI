@@ -81,7 +81,7 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 	}
 
 	@Override
-	public boolean executeCommands(PendingCommand command) {
+	public boolean executeCommand(PendingCommand command) {
 		String cmd = getCommandLine(command);
 		CommandSender sender = command.getCommandType() == CommandType.CONSOLE || !command.isRequireOnline() ? Bukkit.getConsoleSender() : (command.getPlayerUUID() == null ? Bukkit.getPlayer(command.getPlayerName()) : Bukkit.getPlayer(command.getPlayerUUID()));
 		if (command.getCommandType() == CommandType.OP){
