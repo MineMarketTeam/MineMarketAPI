@@ -2,14 +2,11 @@ package com.minemarket.api;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.minemarket.api.exceptions.AfterExecutionCommandUpdateFailureException;
 import com.minemarket.api.types.ConnectionStatus;
@@ -19,7 +16,6 @@ import com.minemarket.api.utils.HttpUtils;
 import com.minemarket.api.utils.JSONResponse;
 import com.minemarket.api.utils.JsonUtils;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
