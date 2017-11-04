@@ -44,8 +44,8 @@ public class MineMarketBaseAPI {
 	private boolean updateAvailable = false;
 	
 	/**
-	 * MetÛdo que inicializa a conex„o com a API, e retorna o status da tentativa.
-	 * @return {@link ConnectionStatus} o status da conex„o.
+	 * Met√≥do que inicializa a conex√£o com a API, e retorna o status da tentativa.
+	 * @return {@link ConnectionStatus} o status da conex√£o.
 	 */
 	public ConnectionStatus initialize(){
 		JSONResponse response = null;
@@ -62,7 +62,7 @@ public class MineMarketBaseAPI {
 					
 					loadPendingCommands();
 					
-					System.out.println(prefix + " Sistema iniciado. Vers„o atual: " + version);
+					System.out.println(prefix + " Sistema iniciado. Vers√£o atual: " + version);
 					
 					scheduler.scheduleAsyncRepeatingTask(new Runnable() {
 						
@@ -73,13 +73,13 @@ public class MineMarketBaseAPI {
 					}, 60, 60);
 					
 					if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
-						System.out.println(prefix + "VocÍ est· usando uma vers„o desatualizada! por favor baixe a vers„o " + response.getData().getString("CURRENT_VERSION"));
+						System.out.println(prefix + "Voc√™ est√° usando uma vers√£o desatualizada! por favor baixe a vers√£o " + response.getData().getString("CURRENT_VERSION"));
 						updateAvailable = true;
 					}
 
 					status = ConnectionStatus.OK;
 				} else {
-					System.out.println(prefix + "Sistema nao foi inicializado porque sua key n„o est· configurada para servidores " + this.serverType);
+					System.out.println(prefix + "Sistema nao foi inicializado porque sua key n√£o est√° configurada para servidores " + this.serverType);
 					System.out.println(prefix + "Por favor, crie uma nova key " + this.serverType + " no painel.");
 					status = ConnectionStatus.WRONG_SERVER_TYPE;
 				}
@@ -92,7 +92,7 @@ public class MineMarketBaseAPI {
 						+ "Entre no painel e permita esse ip se conectar com a API.");
 				status = ConnectionStatus.UNCONFIRMED_IP;
 			} else if (response.getKeyStatus() == KeyStatus.INVALID || response.getKeyStatus() == KeyStatus.UNKNOWN) {
-				System.out.println(prefix + "Sistema nao foi inicializado porque sua key È inv·lida. "
+				System.out.println(prefix + "Sistema nao foi inicializado porque sua key √© inv√°lida. "
 						+ "Por favor, verifique-a em suas configuracoes.");
 				status = ConnectionStatus.INVALID_KEY;
 			}
@@ -175,7 +175,7 @@ public class MineMarketBaseAPI {
 		pendingCommands.remove(pc);
 	}
 	
-	private boolean verifyResponse(JSONResponse jr){
+	public boolean verifyResponse(JSONResponse jr){
 		if (jr != null)
 			if (jr.getKeyStatus() == KeyStatus.VALID)
 				if (jr.getErrors().length() == 0)
@@ -183,13 +183,13 @@ public class MineMarketBaseAPI {
 				else for(int i = 0; i < jr.getErrors().length(); i++)
 					System.out.println(prefix + "Erro: " + jr.getErrors().getString(i));
 			else if (jr.getKeyStatus() == KeyStatus.WAITING_VALIDATION)
-				System.out.println(prefix + "Sua key ainda n„o foi validada.");
+				System.out.println(prefix + "Sua key ainda n√£o foi validada.");
 			else 
 				System.out.println(prefix + "Sua key e invalida.");
 		return false;
 	}
 	
-	private JSONResponse getResponse(String page, String data){
+	public JSONResponse getResponse(String page, String data){
 		try{ 
 			return loadResponse(page, data);
 		} catch (Exception e) {
@@ -198,7 +198,7 @@ public class MineMarketBaseAPI {
 		return null;
 	}
 	
-	private JSONResponse loadResponse(String page, String data) throws IOException, JSONException{
+	public JSONResponse loadResponse(String page, String data) throws IOException, JSONException{
 		if (!page.toLowerCase().endsWith(".php"))
 			page += ".php";
 		HttpURLConnection conn = HttpUtils.createConnection(apiURL + page, HttpUtils.encodeUTFData(data));
