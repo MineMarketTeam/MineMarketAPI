@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.json.JSONException;
 
+import com.minemarket.api.credits.CreditsManager;
+import com.minemarket.api.credits.ProductManager;
 import com.minemarket.api.exceptions.AfterExecutionCommandUpdateFailureException;
 import com.minemarket.api.types.ConnectionStatus;
 import com.minemarket.api.types.KeyStatus;
@@ -36,6 +38,8 @@ public class MineMarketBaseAPI {
 	private final BaseCommandExecutor commandExecutor;
 	private final BaseUpdater updater;
 	private ArrayList<PendingCommand> pendingCommands;
+	private CreditsManager creditsManager = new CreditsManager(this);
+	private ProductManager productManager = new ProductManager(this);
 	private ConnectionStatus status;
 	private boolean updateAvailable = false;
 	
@@ -56,17 +60,25 @@ public class MineMarketBaseAPI {
 			if (response.getKeyStatus() == KeyStatus.VALID){
 				if (response.getServerType().equalsIgnoreCase(this.serverType)){
 					
-					loadPendingCommands();
+					Runnable task;
 					
-					System.out.println(prefix + " Sistema iniciado. Versão atual: " + version);
-					
-					scheduler.scheduleAsyncRepeatingTask(new Runnable() {
+					// Scheduling a task to update our data every minute
+					// This is good because we keep a local copy and avoid creating unnecessary connections every time a player joins
+					scheduler.scheduleAsyncRepeatingTask(task = new Runnable() {
 						
 						@Override
 						public void run() {
 							loadPendingCommands();
+							loadPlayerCreditsDatabase();
+							loadPluginProducts();
 						}
 					}, 60, 60);
+					
+					// Everything looks fine, so let's load our data
+					task.run();
+					
+					System.out.println(prefix + " Sistema iniciado. Versão atual: " + version);
+
 					
 					if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
 						System.out.println(prefix + "Você está usando uma versão desatualizada! por favor baixe a versão " + response.getData().getString("CURRENT_VERSION"));
@@ -119,6 +131,26 @@ public class MineMarketBaseAPI {
 			return response.getData().getString("COMMAND_UPDATE_RESULT").equalsIgnoreCase("SUCCESS");
 		}
 		return false;
+	}
+
+	protected boolean loadPlayerCreditsDatabase(){
+		try {
+			return creditsManager.loadAllCredits();
+		} catch (JSONException | IOException e) {
+			System.out.println(prefix + " Erro ao carregar créditos dos jogadores.");
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	protected boolean loadPluginProducts(){
+		try {
+			return productManager.loadProducts();
+		} catch (JSONException | IOException e) {
+			System.out.println(prefix + " Erro ao carregar produtos que podem ser comprados com créditos.");
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	public synchronized void loadPendingCommands(){ 
