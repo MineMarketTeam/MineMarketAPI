@@ -11,14 +11,17 @@ import com.minemarket.api.MineMarketBukkit;
 import com.minemarket.api.credits.Product;
 import com.minemarket.api.util.ItemUtils;
 
+import lombok.Getter;
+
 public class PageManager {
 
+	@Getter
 	private MineMarketBukkit main;
 	private MineMarketBaseAPI api;
 	private HashMap<String, MenuPage> pages = new HashMap<>();
 	
-	public PageManager(){
-		this.main = MineMarketBukkit.getInstance();
+	public PageManager(MineMarketBukkit main){
+		this.main = main;
 		this.api = main.getApi();
 	}
 	
@@ -52,11 +55,24 @@ public class PageManager {
 		}
 		
 		// Adding default product page
-		addPage(new MenuPage("_products", ChatColor.GOLD + "Loja de Produtos", 3, items));
+		addPage(new MenuPage("$products", ChatColor.GOLD + "Loja de Produtos", 3, items));
 	}
 	
-	public void openPage(MenuPage page, Player player) {
-		// TODO: Abrir menu para jogador
+	public void openPage(String page, Player player) throws NullPointerException{
+		if (page.startsWith("_")){
+			// Handling custom automatic generated pages
+			if (page.startsWith("_buyproduct{")){
+				int productID = Integer.valueOf(page.substring(12).replace("}", ""));
+				
+				// Just for testing purpose
+				player.sendMessage("You are trying to buy product " + productID);
+				player.closeInventory();
+				
+				// TODO: load custom buy-product menu
+			}
+		} else {
+			pages.get(page).openPage(player);
+		}
 	}
 	
 }
