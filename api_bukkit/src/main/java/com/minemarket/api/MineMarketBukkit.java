@@ -43,7 +43,7 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 		scheduler.cancelTasks();
 		FileConfiguration config = getConfig();
 		validateConfig(config);
-		api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", config.getString("key"), this.getDescription().getVersion(), "BUKKIT", scheduler, instance, new BukkitUpdater());
+		api = new MineMarketBaseAPI("http://api.minemarket.com.br/snapshot/", config.getString("key"), this.getDescription().getVersion(), "BUKKIT", scheduler, instance, new BukkitUpdater());
 		api.initialize();
 	}
 	
