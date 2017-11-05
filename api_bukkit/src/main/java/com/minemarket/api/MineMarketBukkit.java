@@ -19,6 +19,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import lombok.Getter;
 import com.minemarket.api.commands.MineMarketCommand;
 import com.minemarket.api.exceptions.MineMarketException;
+import com.minemarket.api.gui.MenuListener;
+import com.minemarket.api.gui.PageManager;
 import com.minemarket.api.types.CommandType;
 import com.minemarket.api.types.ConnectionStatus;
 import com.minemarket.api.types.PendingCommand;
@@ -30,13 +32,19 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 	private static MineMarketBukkit instance;
 	private MineMarketBaseAPI api;
 	private BukkitBaseScheduler scheduler;
+	private PageManager pageManager;
+	private MenuListener menuListener;
 	
 	public void onEnable() {
 		instance = this;
 		scheduler = new BukkitBaseScheduler(instance);
 		loadAPI();
 		getCommand("MineMarket").setExecutor(new MineMarketCommand());
-		Bukkit.getPluginManager().registerEvents(instance, instance);
+		registerListener(instance);
+	}
+	
+	private void registerListener(Listener listener){
+		Bukkit.getPluginManager().registerEvents(listener, instance);
 	}
 	
 	public void loadAPI(){
@@ -45,6 +53,10 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 		validateConfig(config);
 		api = new MineMarketBaseAPI("http://api.minemarket.com.br/snapshot/", config.getString("key"), this.getDescription().getVersion(), "BUKKIT", scheduler, instance, new BukkitUpdater());
 		api.initialize();
+
+		//TODO: Verify if menu pages are enabled before loading pageManager and the menuListener
+		pageManager = new PageManager(instance);
+		registerListener(menuListener = new MenuListener());
 	}
 	
 	@EventHandler
