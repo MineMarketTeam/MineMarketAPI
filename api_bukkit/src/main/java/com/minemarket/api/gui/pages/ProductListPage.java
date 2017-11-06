@@ -26,7 +26,7 @@ public class ProductListPage implements PageLoader {
 	@Override
 	public void loadPage(Player player, String data) {		
 		Set<Product> products = MineMarketBukkit.getInstance().getApi().getProductManager().getPluginProducts();
-		MenuItem[] items = new MenuItem[products.size()];
+		MenuItem[] items = new MenuItem[rows * 9];
 		
 		int pageNumber;
 		try { 
