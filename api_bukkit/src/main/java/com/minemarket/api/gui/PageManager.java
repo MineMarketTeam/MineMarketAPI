@@ -3,11 +3,15 @@ package com.minemarket.api.gui;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.swing.text.Utilities;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.minemarket.api.MineMarketBaseAPI;
 import com.minemarket.api.MineMarketBukkit;
+import com.minemarket.api.credits.PlayerCredits;
 import com.minemarket.api.credits.Product;
 import com.minemarket.api.util.ItemUtils;
 
@@ -64,11 +68,18 @@ public class PageManager {
 			if (page.startsWith("_buyproduct{")){
 				int productID = Integer.valueOf(page.substring(12).replace("}", ""));
 				
-				// Just for testing purpose
-				player.sendMessage("You are trying to buy product " + productID);
-				player.closeInventory();
+				Product product = api.getProductManager().getProduct(productID);
+				PlayerCredits playerCredits = api.getCreditsManager().getPlayerCredits(player.getUniqueId());
+				int credits = playerCredits == null ? 0 : playerCredits.getCredits();
+			
+				MenuItem[] items = new MenuItem[27];
+
+				items[0] = new MenuItem(ItemAction.CHANGE_PAGE, "$products", ItemUtils.createItem(Material.INK_SACK, (byte)8, "Voltar"));
+				items[8] = new MenuItem(ItemAction.CLOSE_MENU, null, ItemUtils.createItem(Material.INK_SACK, (byte)1, "Fechar"));
+				items[11] = new MenuItem(ItemAction.DO_NOTHING, null, ItemUtils.createItem(Material.PAPER, ChatColor.GOLD + "Descrição", product.getDescription()));
+				items[11] = new MenuItem(ItemAction.CHANGE_PAGE, "_confirmbuyproduct{" + productID + "}", ItemUtils.createItem(Material.EMERALD, ChatColor.GREEN + "Comprar", ChatColor.GOLD + "Preço: " + product.getPrice(), ChatColor.GOLD + "Seus créditos: " + credits));
 				
-				// TODO: load custom buy-product menu
+				new MenuPage(page, ChatColor.DARK_AQUA + "Comprar produto " + product.getName(), 3, items).openPage(player);
 			}
 		} else {
 			pages.get(page).openPage(player);
