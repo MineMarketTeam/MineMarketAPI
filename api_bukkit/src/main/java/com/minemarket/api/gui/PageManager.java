@@ -1,22 +1,14 @@
 ﻿package com.minemarket.api.gui;
 
 import java.util.HashMap;
-import java.util.Set;
 
-import javax.swing.text.Utilities;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.minemarket.api.MineMarketBaseAPI;
 import com.minemarket.api.MineMarketBukkit;
-import com.minemarket.api.credits.PlayerCredits;
-import com.minemarket.api.credits.Product;
 import com.minemarket.api.gui.pages.BuyProductPage;
 import com.minemarket.api.gui.pages.ProductInfoPage;
 import com.minemarket.api.gui.pages.ProductListPage;
-import com.minemarket.api.util.ItemUtils;
 
 import lombok.Getter;
 
