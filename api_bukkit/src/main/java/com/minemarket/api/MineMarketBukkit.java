@@ -56,6 +56,7 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 
 		//TODO: Verify if menu pages are enabled before loading pageManager and the menuListener
 		pageManager = new PageManager(instance);
+		pageManager.loadPages();
 		registerListener(menuListener = new MenuListener());
 	}
 	
@@ -77,8 +78,8 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 						}
 						if (api.isUpdateAvailable()){
 							event.getPlayer().sendMessage("====================");
-							event.getPlayer().sendMessage(ChatColor.GOLD + "[MineMarket] " + ChatColor.GREEN + "Existe uma nova vers„o da API disponÌvel para download!");
-							event.getPlayer().sendMessage(ChatColor.BLUE + "NÛs recomendamos que atualize o mais rapidamente o possÌvel, para " + ChatColor.RED + "manter a seguranÁa.");
+							event.getPlayer().sendMessage(ChatColor.GOLD + "[MineMarket] " + ChatColor.GREEN + "Existe uma nova vers√£o da API dispon√≠vel para download!");
+							event.getPlayer().sendMessage(ChatColor.BLUE + "N√≥s recomendamos que atualize o mais rapidamente o poss√≠vel, para " + ChatColor.RED + "manter a seguran√ßa.");
 							event.getPlayer().sendMessage("====================");
 						}
 					}
