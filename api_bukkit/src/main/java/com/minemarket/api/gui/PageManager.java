@@ -77,7 +77,7 @@ public class PageManager {
 				items[0] = new MenuItem(ItemAction.CHANGE_PAGE, "$products", ItemUtils.createItem(Material.INK_SACK, (byte)8, "Voltar"));
 				items[8] = new MenuItem(ItemAction.CLOSE_MENU, null, ItemUtils.createItem(Material.INK_SACK, (byte)1, "Fechar"));
 				items[11] = new MenuItem(ItemAction.DO_NOTHING, null, ItemUtils.createItem(Material.PAPER, ChatColor.GOLD + "Descrição", product.getDescription()));
-				items[11] = new MenuItem(ItemAction.CHANGE_PAGE, "_confirmbuyproduct{" + productID + "}", ItemUtils.createItem(Material.EMERALD, ChatColor.GREEN + "Comprar", ChatColor.GOLD + "Preço: " + product.getPrice(), ChatColor.GOLD + "Seus créditos: " + credits));
+				items[15] = new MenuItem(ItemAction.CHANGE_PAGE, "_confirmbuyproduct{" + productID + "}", ItemUtils.createItem(Material.EMERALD, ChatColor.GREEN + "Comprar", ChatColor.GOLD + "Preço: " + product.getPrice(), ChatColor.GOLD + "Seus créditos: " + credits));
 				
 				new MenuPage(page, ChatColor.DARK_AQUA + "Comprar produto " + product.getName(), 3, items).openPage(player);
 			}
