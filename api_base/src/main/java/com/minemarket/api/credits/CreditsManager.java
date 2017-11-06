@@ -30,7 +30,7 @@ public class CreditsManager {
 	
 	public PlayerCredits getPlayerCredits(UUID uuid){
 		for (PlayerCredits plc : credits.values()){
-			if (plc.uuid == uuid)
+			if (plc.uuid.equals(uuid))
 				return plc;
 		}
 		return null;
@@ -73,6 +73,7 @@ public class CreditsManager {
 				}					
 
 			}
+			System.out.println("[MineMarket CreditsManager] Loaded " + jcredits.length() + " players from credits database" );
 			return true;
 		}
 		return false;
