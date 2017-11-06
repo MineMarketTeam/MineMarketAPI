@@ -31,6 +31,13 @@ public class ProductManager {
 		return new HashSet<>(products);
 	}
 	
+	public Product getProduct(int id){
+		for (Product product : products)
+			if (product.getId() == id)
+				return product;
+		return null;
+	}
+	
 	public boolean loadProducts() throws JSONException, IOException{
 		JSONResponse response;
 		if (api.verifyResponse(response = api.loadResponse("plugin_produtos", api.getKeyData()))){
