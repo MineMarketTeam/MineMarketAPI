@@ -73,8 +73,18 @@ public class CreditsManager {
 				}					
 
 			}
-			System.out.println("[MineMarket CreditsManager] Loaded " + jcredits.length() + " players from credits database" );
 			return true;
+		}
+		return false;
+	}
+	
+	public boolean updateCredits(PlayerCredits pc, int newCredits, String transactionDescription) throws JSONException, IOException{		
+		JSONResponse response;
+		if (api.verifyResponse(response = api.loadResponse("update_player_credits", api.getKeyData() + "&NICK=" + pc.getNick() + "&UUID=" + pc.getUuid().toString() + "&DESCRIPTION=" + transactionDescription + "&OLD_CREDITS=" + pc.getCredits() + "&NEW_CREDITS=" + newCredits))){
+			if (response.getData().getString("CREDITS_UPDATE_RESULT").equalsIgnoreCase("SUCCESS")){
+				loadCredits(pc.getNick(), pc.getUuid());
+				return true;
+			}
 		}
 		return false;
 	}
