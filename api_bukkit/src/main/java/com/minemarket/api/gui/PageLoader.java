@@ -30,7 +30,7 @@ public interface PageLoader {
 		String str = page;
 		int substStart = str.indexOf("{");
 		if (substStart > 0)
-			return str.substring(substStart, str.length() - 1);
+			return str.substring(substStart + 1, str.length() - 1);
 		return "";
 	}
 	

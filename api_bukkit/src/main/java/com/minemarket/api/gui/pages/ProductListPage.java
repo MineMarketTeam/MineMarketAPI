@@ -45,7 +45,6 @@ public class ProductListPage implements PageLoader {
 						ItemUtils.createItem(
 								product.getDisplayItem(), 
 								ChatColor.AQUA + product.getName(),
-								ChatColor.GOLD + "Descrição: " + ChatColor.WHITE + product.getDescription(),
 								ChatColor.GOLD + "Preço: " + ChatColor.WHITE + product.getPrice() + " creditos"
 						)
 				);
@@ -64,7 +63,7 @@ public class ProductListPage implements PageLoader {
 			items[8] = new MenuItem(ItemAction.CHANGE_PAGE, getCustomPrefixWithData(String.valueOf(pageNumber + 1)), ItemUtils.createItem(Material.INK_SACK, (byte) 10, "Próxima Página"));
 		}
 		
-		new MenuPage(getCustomPrefixWithData(data), ChatColor.DARK_AQUA + "Loja de Créditos (pg" + pageNumber + ")", 3, items).openPage(player);;
+		new MenuPage(getCustomPrefixWithData(data), ChatColor.DARK_AQUA + "Loja de Créditos", 3, items).openPage(player);;
 	}
 	
 	
