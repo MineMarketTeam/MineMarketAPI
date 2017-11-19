@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 
 import com.minemarket.api.MineMarketBaseAPI;
@@ -47,6 +49,15 @@ public class MenuListener implements Listener{
 					}
 				}
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onChat(AsyncPlayerChatEvent event){
+		if (event.getMessage().startsWith("menu")) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage(ChatColor.RED + "adsasdsa");
+			MineMarketBukkit.getInstance().getPageManager().openPage("_productList", event.getPlayer());
 		}
 	}
 
