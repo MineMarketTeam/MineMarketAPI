@@ -61,7 +61,7 @@ public class BuyProductPage implements PageLoader{
 							
 						} else {
 							// TODO: load webstore url to buy credits
-							player.sendMessage(ChatColor.RED + "Você não possui créditos suficientes."); // Compre mais em: http://URL");
+							player.sendMessage(ChatColor.RED + "Você não possui créditos suficientes. Compre mais em: " + api.getStoreURL());
 						}
 					} 
 				} catch (JSONException | IOException e) {
