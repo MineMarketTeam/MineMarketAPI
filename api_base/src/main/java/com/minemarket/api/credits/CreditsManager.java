@@ -1,4 +1,4 @@
-package com.minemarket.api.credits;
+ï»¿package com.minemarket.api.credits;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -46,7 +46,7 @@ public class CreditsManager {
 					try {
 						loadCredits(nick, uuid);
 					} catch (JSONException | IOException e) {
-						System.out.println(MineMarketBaseAPI.prefix + "Não foi possível atualizar as informações de créditos do jogador " + nick);
+						System.out.println(MineMarketBaseAPI.prefix + "NÃ£o foi possÃ­vel atualizar as informaÃ§Ãµes de crÃ©ditos do jogador " + nick);
 						e.printStackTrace();
 					}
 				}
