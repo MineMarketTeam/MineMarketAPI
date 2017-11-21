@@ -51,8 +51,7 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 		api = new MineMarketBaseAPI("http://api.minemarket.com.br/snapshot/", config.getString("key"), this.getDescription().getVersion(), "BUKKIT", scheduler, instance, new BukkitUpdater());
 		ConnectionStatus status = api.initialize();
 
-		if (status == ConnectionStatus.OK){
-			//TODO: Verify if menu pages are enabled before loading pageManager and the menuListener
+		if (status == ConnectionStatus.OK && api.isEnableMenu()){
 			pageManager = new PageManager(instance);
 			pageManager.loadPages();
 			registerListener(menuListener = new MenuListener());

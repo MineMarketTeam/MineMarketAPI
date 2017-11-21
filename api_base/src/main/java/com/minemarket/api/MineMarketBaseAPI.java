@@ -49,6 +49,9 @@ public class MineMarketBaseAPI {
 	private ConnectionStatus status;	
 	private String storeName;
 	private String storeURL;
+	private boolean enableCredits;
+	private boolean enableMenu;
+	private String menuCommand;
 	
 	/**
 	 * Metódo que inicializa a conexão com a API, e retorna o status da tentativa.
@@ -70,6 +73,9 @@ public class MineMarketBaseAPI {
 					// Let's get info about the store, such as its NAME and URL
 					loadStoreInfo();
 					
+					// Let's load the remote plugin configuration
+					loadPluginConfig();
+					
 					Runnable task;
 					
 					// Scheduling a task to update our data every minute
@@ -79,8 +85,14 @@ public class MineMarketBaseAPI {
 						@Override
 						public void run() {
 							loadPendingCommands();
-							loadPlayerCreditsDatabase();
-							loadPluginProducts();
+							
+							if (enableCredits){
+								loadPlayerCreditsDatabase();
+							}
+							
+							if (enableMenu){
+								loadPluginProducts();
+							}
 						}
 					}, 60, 60);
 					
@@ -88,6 +100,7 @@ public class MineMarketBaseAPI {
 					task.run();
 					
 					System.out.println(prefix + " Sistema iniciado. Versão atual: " + version);
+					System.out.println(prefix + " Loja atual " + storeName + "/" + storeURL);
 					
 					if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
 						System.out.println(prefix + "Você está usando uma versão desatualizada! por favor baixe a versão " + response.getData().getString("CURRENT_VERSION"));
@@ -150,6 +163,25 @@ public class MineMarketBaseAPI {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	protected boolean loadPluginConfig(){
+		try {
+			JSONResponse response;
+			if (verifyResponse(response = loadResponse("plugin_config", getKeyData()))){
+				JSONObject info = response.getData().getJSONObject("PLUGIN_CONFIG");
+				
+				this.enableCredits = info.getString("CREDITS_STATUS").equals("1");
+				this.enableMenu = info.getString("MENU_STATUS").equals("1");
+				this.menuCommand = info.getString("MENU_COMMAND");
+				
+				return true;
+			};
+		} catch (JSONException | IOException e) {
+			System.out.println(prefix + " Erro ao carregar informações da loja.");
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	protected boolean loadPluginProducts(){

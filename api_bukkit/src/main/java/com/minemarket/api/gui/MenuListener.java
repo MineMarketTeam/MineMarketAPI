@@ -54,10 +54,10 @@ public class MenuListener implements Listener{
 	
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event){
-		if (event.getMessage().startsWith("menu")) {
+		MineMarketBukkit mm = MineMarketBukkit.getInstance();
+		if (event.getMessage().toLowerCase().startsWith("/" + mm.getApi().getMenuCommand())) {
 			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.RED + "adsasdsa");
-			MineMarketBukkit.getInstance().getPageManager().openPage("_productList", event.getPlayer());
+			mm.getPageManager().openPage("_productList", event.getPlayer());
 		}
 	}
 
