@@ -27,13 +27,32 @@ public class CreditsManager {
 		}
 		return null;
 	}
-	
+
 	public PlayerCredits getPlayerCredits(UUID uuid){
 		for (PlayerCredits plc : credits.values()){
 			if (plc.uuid.equals(uuid))
 				return plc;
 		}
 		return null;
+	}
+	
+	public PlayerCredits getPlayerCredits(UUID uuid, String nick){
+		PlayerCredits credits;
+		if ((credits = getPlayerCredits(uuid)) == null && (credits = getPlayerCredits(nick)) != null) {
+			api.getScheduler().runTaskAsynchronously(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						loadCredits(nick, uuid);
+					} catch (JSONException | IOException e) {
+						System.out.println(MineMarketBaseAPI.prefix + "Não foi possível atualizar as informações de créditos do jogador " + nick);
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		return credits;
 	}
 	
 	public boolean loadAllCredits() throws JSONException, IOException{

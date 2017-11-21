@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class MineMarketBaseAPI {
 
-	private static final String prefix = "[MineMarketAPI] ";
+	public static final String prefix = "[MineMarketAPI] ";
 	
 	private final String apiURL;
 	private final String key;

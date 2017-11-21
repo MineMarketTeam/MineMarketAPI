@@ -33,7 +33,7 @@ public class ProductInfoPage implements PageLoader {
 		MineMarketBaseAPI api = MineMarketBukkit.getInstance().getApi();
 		
 		Product product = api.getProductManager().getProduct(productID);
-		PlayerCredits playerCredits = api.getCreditsManager().getPlayerCredits(player.getUniqueId());
+		PlayerCredits playerCredits = api.getCreditsManager().getPlayerCredits(player.getUniqueId(), player.getName());
 		int credits = playerCredits == null ? 0 : playerCredits.getCredits();
 	
 		MenuItem[] items = new MenuItem[27];

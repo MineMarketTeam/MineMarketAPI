@@ -38,7 +38,7 @@ public class BuyProductPage implements PageLoader{
 			public void run() {
 				try {
 					if (creditsManager.loadCredits(player.getName(), player.getUniqueId())){
-						PlayerCredits playerCredits = api.getCreditsManager().getPlayerCredits(player.getUniqueId());
+						PlayerCredits playerCredits = api.getCreditsManager().getPlayerCredits(player.getUniqueId(), player.getName());
 						int credits = playerCredits == null ? 0 : playerCredits.getCredits();
 						
 						if (credits >= product.getPrice()){
