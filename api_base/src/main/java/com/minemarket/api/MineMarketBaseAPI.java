@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.minemarket.api.credits.CreditsManager;
 import com.minemarket.api.credits.ProductManager;
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class MineMarketBaseAPI {
 
 	private static final String prefix = "[MineMarketAPI] ";
+	
 	private final String apiURL;
 	private final String key;
 	private final String version;
@@ -37,11 +40,15 @@ public class MineMarketBaseAPI {
 	private final BaseTaskScheduler scheduler;
 	private final BaseCommandExecutor commandExecutor;
 	private final BaseUpdater updater;
+	
 	private ArrayList<PendingCommand> pendingCommands;
 	private CreditsManager creditsManager = new CreditsManager(this);
 	private ProductManager productManager = new ProductManager(this);
-	private ConnectionStatus status;
+
 	private boolean updateAvailable = false;
+	private ConnectionStatus status;	
+	private String storeName;
+	private String storeURL;
 	
 	/**
 	 * Metódo que inicializa a conexão com a API, e retorna o status da tentativa.
@@ -59,6 +66,9 @@ public class MineMarketBaseAPI {
 		if (response != null){
 			if (response.getKeyStatus() == KeyStatus.VALID){
 				if (response.getServerType().equalsIgnoreCase(this.serverType)){
+					
+					// Let's get info about the store, such as its NAME and URL
+					loadStoreInfo();
 					
 					Runnable task;
 					
@@ -78,7 +88,6 @@ public class MineMarketBaseAPI {
 					task.run();
 					
 					System.out.println(prefix + " Sistema iniciado. Versão atual: " + version);
-
 					
 					if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
 						System.out.println(prefix + "Você está usando uma versão desatualizada! por favor baixe a versão " + response.getData().getString("CURRENT_VERSION"));
@@ -151,6 +160,24 @@ public class MineMarketBaseAPI {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	protected boolean loadStoreInfo(){
+		try {
+			JSONResponse response;
+			if (verifyResponse(response = loadResponse("store_info", getKeyData()))){
+				JSONObject info = response.getData().getJSONObject("STORE_INFO");
+				
+				this.storeName = info.getString("STORE_NAME");
+				this.storeURL = info.getString("STORE_URL");
+				
+				return true;
+			};
+		} catch (JSONException | IOException e) {
+			System.out.println(prefix + " Erro ao carregar informações da loja.");
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public synchronized void loadPendingCommands(){ 
