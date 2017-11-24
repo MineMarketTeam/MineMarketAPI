@@ -16,13 +16,11 @@ public class PageManager {
 
 	@Getter
 	private MineMarketBukkit main;
-	private MineMarketBaseAPI api;
 	private HashMap<String, MenuPage> pages = new HashMap<>();
 	private HashMap<String, PageLoader> pageLoaders = new HashMap<>();
 	
 	public PageManager(MineMarketBukkit main){
 		this.main = main;
-		this.api = main.getApi();
 	}
 	
 	public boolean addPage(MenuPage page) {

@@ -99,8 +99,8 @@ public class MineMarketBaseAPI {
 					// Everything looks fine, so let's load our data
 					task.run();
 					
-					System.out.println(prefix + " Sistema iniciado. Versão atual: " + version);
-					System.out.println(prefix + " Loja atual " + storeName + "/" + storeURL);
+					System.out.println(prefix + "Sistema iniciado. Versão atual: " + version);
+					System.out.println(prefix + "Loja atual " + storeName + "/" + storeURL);
 					
 					if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
 						System.out.println(prefix + "Você está usando uma versão desatualizada! por favor baixe a versão " + response.getData().getString("CURRENT_VERSION"));
@@ -159,7 +159,7 @@ public class MineMarketBaseAPI {
 		try {
 			return creditsManager.loadAllCredits();
 		} catch (JSONException | IOException e) {
-			System.out.println(prefix + " Erro ao carregar créditos dos jogadores.");
+			System.out.println(prefix + "Erro ao carregar créditos dos jogadores.");
 			e.printStackTrace();
 			return false;
 		}
@@ -178,7 +178,7 @@ public class MineMarketBaseAPI {
 				return true;
 			};
 		} catch (JSONException | IOException e) {
-			System.out.println(prefix + " Erro ao carregar informações da loja.");
+			System.out.println(prefix + "Erro ao carregar configurações remotas do plugin.");
 			e.printStackTrace();
 		}
 		return false;
@@ -188,7 +188,7 @@ public class MineMarketBaseAPI {
 		try {
 			return productManager.loadProducts();
 		} catch (JSONException | IOException e) {
-			System.out.println(prefix + " Erro ao carregar produtos que podem ser comprados com créditos.");
+			System.out.println(prefix + "Erro ao carregar produtos que podem ser comprados com créditos.");
 			e.printStackTrace();
 			return false;
 		}
