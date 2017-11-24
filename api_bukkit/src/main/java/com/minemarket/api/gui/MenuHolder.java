@@ -15,6 +15,14 @@ public class MenuHolder implements InventoryHolder{
 	public MenuHolder(MenuPage page) {
 		this.page = page;
 		inv = Bukkit.createInventory(this, page.getRows() * 9, page.getPageTitle());
+		
+		for (int x = 0; x < Math.min(page.getRows() * 9, page.getItems().length); x++){
+			try {
+				inv.setItem(x, page.getItem(x).getDisplayItem());
+			} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+				
+			}
+		}
 	}
 	
 	@Override

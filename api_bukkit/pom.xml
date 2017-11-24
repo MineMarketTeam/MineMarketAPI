@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>minemarket-api</groupId>
 	<artifactId>api_bukkit</artifactId>
-	<version>v1</version>
+	<version>v2.1</version>
 	<name>api_bukkit</name>
 	<repositories>
 		<repository>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>minemarket-api</groupId>
 			<artifactId>api_base</artifactId>
-			<version>v1</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

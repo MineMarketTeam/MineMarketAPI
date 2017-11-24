@@ -2,11 +2,8 @@ package com.minemarket.api;
 
 import java.util.UUID;
 
-import javax.xml.transform.OutputKeys;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -16,12 +13,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import lombok.Getter;
 import com.minemarket.api.commands.MineMarketCommand;
-import com.minemarket.api.exceptions.MineMarketException;
+import com.minemarket.api.gui.MenuListener;
+import com.minemarket.api.gui.PageManager;
 import com.minemarket.api.types.CommandType;
 import com.minemarket.api.types.ConnectionStatus;
 import com.minemarket.api.types.PendingCommand;
+
+import lombok.Getter;
 
 @Getter
 public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor, Listener{
@@ -30,21 +29,33 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 	private static MineMarketBukkit instance;
 	private MineMarketBaseAPI api;
 	private BukkitBaseScheduler scheduler;
+	private PageManager pageManager;
+	private MenuListener menuListener;
 	
 	public void onEnable() {
 		instance = this;
 		scheduler = new BukkitBaseScheduler(instance);
 		loadAPI();
 		getCommand("MineMarket").setExecutor(new MineMarketCommand());
-		Bukkit.getPluginManager().registerEvents(instance, instance);
+		registerListener(instance);
+	}
+	
+	private void registerListener(Listener listener){
+		Bukkit.getPluginManager().registerEvents(listener, instance);
 	}
 	
 	public void loadAPI(){
 		scheduler.cancelTasks();
 		FileConfiguration config = getConfig();
 		validateConfig(config);
-		api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", config.getString("key"), this.getDescription().getVersion(), "BUKKIT", scheduler, instance, new BukkitUpdater());
-		api.initialize();
+		api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2.1/", config.getString("key"), this.getDescription().getVersion(), "BUKKIT", scheduler, instance, new BukkitUpdater());
+		ConnectionStatus status = api.initialize();
+
+		if (status == ConnectionStatus.OK && api.isEnableMenu()){
+			pageManager = new PageManager(instance);
+			pageManager.loadPages();
+			registerListener(menuListener = new MenuListener());
+		}
 	}
 	
 	@EventHandler
@@ -65,8 +76,8 @@ public class MineMarketBukkit extends JavaPlugin implements BaseCommandExecutor,
 						}
 						if (api.isUpdateAvailable()){
 							event.getPlayer().sendMessage("====================");
-							event.getPlayer().sendMessage(ChatColor.GOLD + "[MineMarket] " + ChatColor.GREEN + "Existe uma nova vers„o da API disponÌvel para download!");
-							event.getPlayer().sendMessage(ChatColor.BLUE + "NÛs recomendamos que atualize o mais rapidamente o possÌvel, para " + ChatColor.RED + "manter a seguranÁa.");
+							event.getPlayer().sendMessage(ChatColor.GOLD + "[MineMarket] " + ChatColor.GREEN + "Existe uma nova vers√£o da API dispon√≠vel para download!");
+							event.getPlayer().sendMessage(ChatColor.BLUE + "N√≥s recomendamos que atualize o mais rapidamente o poss√≠vel, para " + ChatColor.RED + "manter a seguran√ßa.");
 							event.getPlayer().sendMessage("====================");
 						}
 					}

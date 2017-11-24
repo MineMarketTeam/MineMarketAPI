@@ -1,4 +1,4 @@
-package com.minemarket.api.credits;
+﻿package com.minemarket.api.credits;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -27,13 +27,32 @@ public class CreditsManager {
 		}
 		return null;
 	}
-	
+
 	public PlayerCredits getPlayerCredits(UUID uuid){
 		for (PlayerCredits plc : credits.values()){
-			if (plc.uuid == uuid)
+			if (plc.uuid.equals(uuid))
 				return plc;
 		}
 		return null;
+	}
+	
+	public PlayerCredits getPlayerCredits(UUID uuid, String nick){
+		PlayerCredits credits;
+		if ((credits = getPlayerCredits(uuid)) == null && (credits = getPlayerCredits(nick)) != null) {
+			api.getScheduler().runTaskAsynchronously(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						loadCredits(nick, uuid);
+					} catch (JSONException | IOException e) {
+						System.out.println(MineMarketBaseAPI.prefix + "Não foi possível atualizar as informações de créditos do jogador " + nick);
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		return credits;
 	}
 	
 	public boolean loadAllCredits() throws JSONException, IOException{
@@ -74,6 +93,17 @@ public class CreditsManager {
 
 			}
 			return true;
+		}
+		return false;
+	}
+	
+	public boolean updateCredits(PlayerCredits pc, int newCredits, String transactionDescription) throws JSONException, IOException{		
+		JSONResponse response;
+		if (api.verifyResponse(response = api.loadResponse("update_player_credits", api.getKeyData() + "&NICK=" + pc.getNick() + "&UUID=" + pc.getUuid().toString() + "&DESCRIPTION=" + transactionDescription + "&OLD_CREDITS=" + pc.getCredits() + "&NEW_CREDITS=" + newCredits))){
+			if (response.getData().getString("CREDITS_UPDATE_RESULT").equalsIgnoreCase("SUCCESS")){
+				loadCredits(pc.getNick(), pc.getUuid());
+				return true;
+			}
 		}
 		return false;
 	}

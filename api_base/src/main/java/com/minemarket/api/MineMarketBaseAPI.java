@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.minemarket.api.credits.CreditsManager;
 import com.minemarket.api.credits.ProductManager;
@@ -29,7 +31,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class MineMarketBaseAPI {
 
-	private static final String prefix = "[MineMarketAPI] ";
+	public static final String prefix = "[MineMarketAPI] ";
+	
 	private final String apiURL;
 	private final String key;
 	private final String version;
@@ -37,11 +40,18 @@ public class MineMarketBaseAPI {
 	private final BaseTaskScheduler scheduler;
 	private final BaseCommandExecutor commandExecutor;
 	private final BaseUpdater updater;
+	
 	private ArrayList<PendingCommand> pendingCommands;
 	private CreditsManager creditsManager = new CreditsManager(this);
 	private ProductManager productManager = new ProductManager(this);
-	private ConnectionStatus status;
+
 	private boolean updateAvailable = false;
+	private ConnectionStatus status;	
+	private String storeName;
+	private String storeURL;
+	private boolean enableCredits;
+	private boolean enableMenu;
+	private String menuCommand;
 	
 	/**
 	 * Metódo que inicializa a conexão com a API, e retorna o status da tentativa.
@@ -60,6 +70,12 @@ public class MineMarketBaseAPI {
 			if (response.getKeyStatus() == KeyStatus.VALID){
 				if (response.getServerType().equalsIgnoreCase(this.serverType)){
 					
+					// Let's get info about the store, such as its NAME and URL
+					loadStoreInfo();
+					
+					// Let's load the remote plugin configuration
+					loadPluginConfig();
+					
 					Runnable task;
 					
 					// Scheduling a task to update our data every minute
@@ -69,16 +85,22 @@ public class MineMarketBaseAPI {
 						@Override
 						public void run() {
 							loadPendingCommands();
-							loadPlayerCreditsDatabase();
-							loadPluginProducts();
+							
+							if (enableCredits){
+								loadPlayerCreditsDatabase();
+							}
+							
+							if (enableMenu){
+								loadPluginProducts();
+							}
 						}
 					}, 60, 60);
 					
 					// Everything looks fine, so let's load our data
 					task.run();
 					
-					System.out.println(prefix + " Sistema iniciado. Versão atual: " + version);
-
+					System.out.println(prefix + "Sistema iniciado. Versão atual: " + version);
+					System.out.println(prefix + "Loja atual " + storeName + "/" + storeURL);
 					
 					if (!version.equalsIgnoreCase(response.getData().getString("CURRENT_VERSION"))){
 						System.out.println(prefix + "Você está usando uma versão desatualizada! por favor baixe a versão " + response.getData().getString("CURRENT_VERSION"));
@@ -137,20 +159,57 @@ public class MineMarketBaseAPI {
 		try {
 			return creditsManager.loadAllCredits();
 		} catch (JSONException | IOException e) {
-			System.out.println(prefix + " Erro ao carregar créditos dos jogadores.");
+			System.out.println(prefix + "Erro ao carregar créditos dos jogadores.");
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	protected boolean loadPluginConfig(){
+		try {
+			JSONResponse response;
+			if (verifyResponse(response = loadResponse("plugin_config", getKeyData()))){
+				JSONObject info = response.getData().getJSONObject("PLUGIN_CONFIG");
+				
+				this.enableCredits = info.getString("CREDITS_STATUS").equals("1");
+				this.enableMenu = info.getString("MENU_STATUS").equals("1");
+				this.menuCommand = info.getString("MENU_COMMAND");
+				
+				return true;
+			};
+		} catch (JSONException | IOException e) {
+			System.out.println(prefix + "Erro ao carregar configurações remotas do plugin.");
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	protected boolean loadPluginProducts(){
 		try {
 			return productManager.loadProducts();
 		} catch (JSONException | IOException e) {
-			System.out.println(prefix + " Erro ao carregar produtos que podem ser comprados com créditos.");
+			System.out.println(prefix + "Erro ao carregar produtos que podem ser comprados com créditos.");
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	protected boolean loadStoreInfo(){
+		try {
+			JSONResponse response;
+			if (verifyResponse(response = loadResponse("store_info", getKeyData()))){
+				JSONObject info = response.getData().getJSONObject("STORE_INFO");
+				
+				this.storeName = info.getString("STORE_NAME");
+				this.storeURL = info.getString("STORE_URL");
+				
+				return true;
+			};
+		} catch (JSONException | IOException e) {
+			System.out.println(prefix + " Erro ao carregar informações da loja.");
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public synchronized void loadPendingCommands(){ 

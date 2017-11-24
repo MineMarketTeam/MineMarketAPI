@@ -16,6 +16,10 @@ public class ItemUtils {
 		return list;
 	}
 
+	public static ItemStack createItem(int type, Byte data, String name, String... lore) {
+		return createItem(type, data, name, wrapLore(lore));
+	}  
+	
 	public static ItemStack createItem(int type, String name, String... lore) {
 		return createItem(type, name, wrapLore(lore));
 	}
@@ -24,12 +28,24 @@ public class ItemUtils {
 		return createItem(type, name, wrapLore(lore));
 	}
 	
+	public static ItemStack createItem(Material type, Byte data, String name, String... lore) {
+		return createItem(type, data, name, wrapLore(lore));
+	}  
+	
 	public static ItemStack createItem(int type, String name, List<String> lore) {
 		return updateItemMeta(new ItemStack(type), name, lore);
 	}
 	
+	public static ItemStack createItem(int type, Byte data, String name, List<String> lore) {
+		return updateItemMeta(new ItemStack(type, 1, (short)0, data), name, lore);
+	}
+	
 	public static ItemStack createItem(Material type, String name, List<String> lore) {
 		return updateItemMeta(new ItemStack(type), name, lore);
+	}
+	
+	public static ItemStack createItem(Material type, Byte data, String name, List<String> lore) {
+		return updateItemMeta(new ItemStack(type, 1, (short)0, data), name, lore);
 	}
 	
 	public static ItemStack updateItemMeta(ItemStack item, String name, List<String> lore) {
