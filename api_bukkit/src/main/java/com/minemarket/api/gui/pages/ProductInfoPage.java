@@ -47,7 +47,7 @@ public class ProductInfoPage implements PageLoader {
 				ChatColor.GOLD + "Seus créditos: " + ChatColor.WHITE + credits, 
 				(credits >= product.getPrice()) ? ChatColor.AQUA + "Saldo Final: " + ChatColor.WHITE + (credits - product.getPrice()) : ChatColor.RED + "Você não possui créditos suficientes" ));
 		
-		new MenuPage(getCustomPrefixWithData(data), ChatColor.DARK_AQUA + "Comprar produto " + product.getName(), 3, items).openPage(player);
+		new MenuPage(getCustomPrefixWithData(data), ChatColor.DARK_AQUA + "Informações do Produto", 3, items).openPage(player);
 		
 	}
 	

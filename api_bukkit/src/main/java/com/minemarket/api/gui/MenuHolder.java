@@ -14,7 +14,7 @@ public class MenuHolder implements InventoryHolder{
 	
 	public MenuHolder(MenuPage page) {
 		this.page = page;
-		inv = Bukkit.createInventory(this, page.getRows() * 9, page.getPageTitle());
+		inv = Bukkit.createInventory(this, page.getRows() * 9, limitTitle());
 		
 		for (int x = 0; x < Math.min(page.getRows() * 9, page.getItems().length); x++){
 			try {
@@ -28,6 +28,12 @@ public class MenuHolder implements InventoryHolder{
 	@Override
 	public Inventory getInventory() {
 		return inv;
+	}
+	
+	private String limitTitle() {
+		if (page.getPageTitle().length() > 32)
+			return page.getPageTitle().substring(0, 32);
+		return page.getPageTitle();
 	}
 	
 }
