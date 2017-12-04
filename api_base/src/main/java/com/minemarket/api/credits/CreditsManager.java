@@ -29,9 +29,11 @@ public class CreditsManager {
 	}
 
 	public PlayerCredits getPlayerCredits(UUID uuid){
-		for (PlayerCredits plc : credits.values()){
-			if (plc.uuid.equals(uuid))
-				return plc;
+		if (uuid != null) {
+			for (PlayerCredits plc : credits.values()){
+				if (plc.uuid != null && uuid.equals(plc.uuid))
+					return plc;
+			}
 		}
 		return null;
 	}
