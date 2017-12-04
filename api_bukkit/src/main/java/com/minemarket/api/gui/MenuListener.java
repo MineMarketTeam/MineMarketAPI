@@ -36,9 +36,7 @@ public class MenuListener implements Listener{
 						event.getWhoClicked().closeInventory();
 						break;
 					case CHANGE_PAGE:
-						try {
-							MineMarketBukkit.getInstance().getPageManager().openPage(clickedItem.getActionData(), player);
-						} catch (NullPointerException e) {
+						if (!MineMarketBukkit.getInstance().getPageManager().openPage(clickedItem.getActionData(), player)) {
 							player.closeInventory();
 							player.sendMessage(ChatColor.RED + "Página não encontrada.");
 						}

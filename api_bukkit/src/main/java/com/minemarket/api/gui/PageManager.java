@@ -46,16 +46,21 @@ public class PageManager {
 		addPageLoader(new BuyProductPage());
 	}
 	
-	public void openPage(String page, Player player) throws NullPointerException{
+	public boolean openPage(String page, Player player){
 		if (page.startsWith("_")){
 			// Handling custom automatic generated pages
 			String loaderName;
 			if (pageLoaders.containsKey(loaderName = PageLoader.truncateData(page))){
 				pageLoaders.get(loaderName).loadPage(player, PageLoader.getData(page));
+				return true;
 			}
 		} else {
-			pages.get(page).openPage(player);
+			if (pages.containsKey(page)) {
+				pages.get(page).openPage(player);
+				return true;
+			}
 		}
+		return false;
 	}
 	
 }
