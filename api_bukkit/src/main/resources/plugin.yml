@@ -1,7 +1,7 @@
 name: MineMarketBukkit
 main: com.minemarket.api.MineMarketBukkit
-author: SAM_XPS
+authors: [SAM_XPS, vitorblog]
 load: startup
-version: 2.1
+version: 2.2
 commands:
   minemarket:

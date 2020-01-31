@@ -1,37 +1,37 @@
 package com.minemarket.api.types;
 
 /**
- * Todos os STATUS possíveis para a conexão com a API.
+ * Todos os STATUS possï¿½veis para a conexï¿½o com a API.
  */
 public enum ConnectionStatus {
-	
-	/**
-	 * A conexão foi bem sucedida e a key é válida.
-	 */
-	OK,
-	
-	/**
-	 * O tipo de servidor relacionado com a key está diferente.
-	 */
-	WRONG_SERVER_TYPE,
-	
-	/**
-	 * A key utilizada é inválida.
-	 */
-	INVALID_KEY,
-	
-	/**
-	 * O IP utilizado para a conexão foi bloqueado para esta key.
-	 */
-	BLOCKED_IP, 
-	
-	/**
-	 * O IP utilizado ainda não foi autorizado.
-	 */
-	UNCONFIRMED_IP, 
-	
-	/**
-	 * Um erro ocorreu ao se conectar com a API.
-	 */
-	CONNECTION_ERROR, 
+
+    /**
+     * A conexï¿½o foi bem sucedida e a key ï¿½ vï¿½lida.
+     */
+    OK,
+
+    /**
+     * O tipo de servidor relacionado com a key estï¿½ diferente.
+     */
+    WRONG_SERVER_TYPE,
+
+    /**
+     * A key utilizada ï¿½ invï¿½lida.
+     */
+    INVALID_KEY,
+
+    /**
+     * O IP utilizado para a conexï¿½o foi bloqueado para esta key.
+     */
+    BLOCKED_IP,
+
+    /**
+     * O IP utilizado ainda nï¿½o foi autorizado.
+     */
+    UNCONFIRMED_IP,
+
+    /**
+     * Um erro ocorreu ao se conectar com a API.
+     */
+    CONNECTION_ERROR,
 }

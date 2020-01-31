@@ -2,14 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>minemarket-api</groupId>
-	<artifactId>api_bukkit</artifactId>
+	<artifactId>api_sponge</artifactId>
 	<version>v2.2</version>
-	<name>api_bukkit</name>
+	<name>api_sponge</name>
 
 	<repositories>
 		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+			<id>sponge-repo</id>
+			<name>Sponge Maven Repository</name>
+			<url>https://repo.spongepowered.org/maven</url>
 		</repository>
 	</repositories>
 
@@ -21,9 +22,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<groupId>org.spongepowered</groupId>
+			<artifactId>spongeapi</artifactId>
+			<version>7.1.0</version>
+			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -32,8 +34,9 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+
 	<build>
-	<finalName>MineMarketBukkit</finalName>
+		<finalName>MineMarketSponge</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -51,7 +54,7 @@
 					<archive>
 						<manifest>
 							<mainClass>
-								com.minemarket.api.MineMarketBukkit
+								com.minemarket.api.MineMarketSponge
 							</mainClass>
 						</manifest>
 					</archive>

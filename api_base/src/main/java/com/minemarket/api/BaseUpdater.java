@@ -6,33 +6,33 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Esta interface deve ser implementada para atualizações automáticas da aplicação, qunado houver uma nova versão disponível.
- *
+ * Esta interface deve ser implementada para atualizaï¿½ï¿½es automï¿½ticas da aplicaï¿½ï¿½o, qunado houver uma nova versï¿½o disponï¿½vel.
  */
 public interface BaseUpdater {
 
-	/**
-	 * Este método será chamado toda vez que houver a necessidade de realizar uma atualização.
-	 * Deve conter todo o procedimento necessário para que o sistema seja atualizado para a nova versão.
-	 */
-	public void update();
-	
-	/**
-	 * Função que auxilia no donwload de arquivos via HTTP.
-	 * @param downloadURL a URL de origem.
-	 * @param savePath o local de arquivo destino.
-	 * @throws IOException Disparada caso aconteça alguma falha durante a operação.
-	 */
-    public default void downloadFile(String downloadURL, String savePath) throws IOException{
+    /**
+     * Este mï¿½todo serï¿½ chamado toda vez que houver a necessidade de realizar uma atualizaï¿½ï¿½o.
+     * Deve conter todo o procedimento necessï¿½rio para que o sistema seja atualizado para a nova versï¿½o.
+     */
+    void update();
+
+    /**
+     * Funï¿½ï¿½o que auxilia no donwload de arquivos via HTTP.
+     *
+     * @param downloadURL a URL de origem.
+     * @param savePath    o local de arquivo destino.
+     * @throws IOException Disparada caso aconteï¿½a alguma falha durante a operaï¿½ï¿½o.
+     */
+    default void downloadFile(String downloadURL, String savePath) throws IOException {
         URL download = new URL(downloadURL);
         BufferedInputStream in = null;
         FileOutputStream fout = null;
         try {
-          
+
             in = new BufferedInputStream(download.openStream());
             fout = new FileOutputStream(savePath);
 
-            final byte data[] = new byte[1024];
+            final byte[] data = new byte[1024];
             int count;
             while ((count = in.read(data, 0, 1024)) != -1) {
                 fout.write(data, 0, count);
@@ -46,5 +46,5 @@ public interface BaseUpdater {
             }
         }
     }
-	
+
 }

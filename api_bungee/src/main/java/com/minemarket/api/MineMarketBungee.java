@@ -45,7 +45,7 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 		scheduler.cancelTasks();
 		if (loadConfig() && validateConfig()){
 			System.out.println(configuration.getString("key"));
-			api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", configuration.getString("key"),  "1.2", "BUNGEE", scheduler, instance, new BungeeUpdater());
+			api = new MineMarketBaseAPI(configuration.getString("key"),  "1.2", "BUNGEE", scheduler, instance, new BungeeUpdater());
 			api.initialize();
 			return true;
 		}
@@ -69,7 +69,7 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 			configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder(), "config.yml"));
 			return true;
 		} catch (IOException e) {
-			System.out.println("[MineMarketBungee] Um erro ocorreu ao carregar configurações do seu plugin: ");
+			System.out.println("[MineMarketBungee] Um erro ocorreu ao carregar configuraï¿½ï¿½es do seu plugin: ");
 			e.printStackTrace();
 			return false;
 		}
@@ -80,7 +80,7 @@ public class MineMarketBungee extends Plugin implements BaseCommandExecutor, Lis
 			ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, new File(getDataFolder(), "config.yml"));
 			return true;
 		} catch (IOException e) {
-			System.out.println("[MineMarketBungee] Um erro ocorreu ao carregar configurações do seu plugin: ");
+			System.out.println("[MineMarketBungee] Um erro ocorreu ao carregar configuraï¿½ï¿½es do seu plugin: ");
 			e.printStackTrace();
 			return false;
 		}

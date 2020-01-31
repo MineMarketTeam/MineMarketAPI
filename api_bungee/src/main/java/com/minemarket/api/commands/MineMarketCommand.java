@@ -10,7 +10,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class MineMarketCommand extends Command {
 
 	public MineMarketCommand() {
-		// Utilizamos o g antes de minemarket para não ocorrer confusões em servidores que utilizam ambas versões da API: Bukkit + Bungee
+		// Utilizamos o g antes de minemarket para nï¿½o ocorrer confusï¿½es em servidores que utilizam ambas versï¿½es da API: Bukkit + Bungee
 		super("gminemarket");
 	}
 
@@ -25,7 +25,7 @@ public class MineMarketCommand extends Command {
 						sender.sendMessage(ChatColor.GREEN + "API recarregada.");
 						execute(sender, new String[] { "info" });
 					} else {
-						sender.sendMessage(ChatColor.RED + "Não foi possível recarregar a API (Verifique o Console).");
+						sender.sendMessage(ChatColor.RED + "Nï¿½o foi possï¿½vel recarregar a API (Verifique o Console).");
 					}
 					return;
 				} else if (sbcmd.equalsIgnoreCase("setkey")) {
@@ -37,7 +37,7 @@ public class MineMarketCommand extends Command {
 						MineMarketBungee.getInstance().saveConfig();
 						sender.sendMessage(ChatColor.GOLD + "Key atualizada para: " + ChatColor.GREEN + key);
 						sender.sendMessage(ChatColor.YELLOW + "Digite " + ChatColor.GOLD + "/gMineMarket reload"
-								+ ChatColor.YELLOW + " para carregar as alterações.");
+								+ ChatColor.YELLOW + " para carregar as alteraï¿½ï¿½es.");
 					}
 					return;
 				} else if (sbcmd.equalsIgnoreCase("info")) {
@@ -89,7 +89,7 @@ public class MineMarketCommand extends Command {
 						}
 					if (api.isUpdateAvailable()) {
 						message += "\n" + ChatColor.GOLD
-								+ "Existe uma nova versão disponível! Por favor atualize assim que possível, fazendo o download no nosso site.";
+								+ "Existe uma nova versï¿½o disponï¿½vel! Por favor atualize assim que possï¿½vel, fazendo o download no nosso site.";
 					}
 					sender.sendMessage(ChatColor.WHITE + "Status do sistema: " + message);
 					return;
@@ -98,13 +98,13 @@ public class MineMarketCommand extends Command {
 
 			sender.sendMessage("===========================");
 			sender.sendMessage(ChatColor.GOLD + "Ajuda - MineMarket (BungeeCord)");
-			sender.sendMessage(ChatColor.AQUA + "Subcomandos disponíveis:");
+			sender.sendMessage(ChatColor.AQUA + "Subcomandos disponï¿½veis:");
 			sender.sendMessage("");
 			sender.sendMessage(ChatColor.GREEN + "/gMineMarket setkey <key>" + ChatColor.WHITE
-					+ " - Use para configurar a KEY de acesso à API.");
+					+ " - Use para configurar a KEY de acesso ï¿½ API.");
 			sender.sendMessage(ChatColor.GREEN + "/gMineMarket info" + ChatColor.WHITE + " - Veja o status do sistema.");
 			sender.sendMessage(ChatColor.GREEN + "/gMineMarket reload" + ChatColor.WHITE
-					+ " - Recarrega as configurações do sistema.");
+					+ " - Recarrega as configuraï¿½ï¿½es do sistema.");
 			sender.sendMessage("===========================");
 
 		} else {

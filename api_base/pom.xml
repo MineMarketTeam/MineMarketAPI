@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>minemarket-api</groupId>
 	<artifactId>api_base</artifactId>
-	<version>v2.1</version>
+	<version>v2.2</version>
 	<name>api_base</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.10</version>
+			<version>1.18.10</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

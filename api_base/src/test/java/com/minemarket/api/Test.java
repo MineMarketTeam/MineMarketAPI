@@ -7,6 +7,7 @@ import com.minemarket.api.BaseTaskScheduler;
 import com.minemarket.api.MineMarketBaseAPI;
 import com.minemarket.api.types.ConnectionStatus;
 import com.minemarket.api.types.PendingCommand;
+import org.json.JSONObject;
 
 public class Test implements BaseCommandExecutor, BaseTaskScheduler{
 
@@ -42,25 +43,27 @@ public class Test implements BaseCommandExecutor, BaseTaskScheduler{
 
 	@Override
 	public boolean executeCommand(PendingCommand command) {
-		System.out.println(command.getCommandLine().replaceAll("%nick%", command.getPlayerName()));
+		//System.out.println(command.getCommandLine().replaceAll("%nick%", command.getPlayerName()));
 			
 		return false;
 	}
 	
 	public void testar(){
-		MineMarketBaseAPI api = new MineMarketBaseAPI("http://api.minemarket.com.br/v2/", "TEST-KEY", "1.1", "TEST", this, this, new BaseUpdater() {			
+		MineMarketBaseAPI api = new MineMarketBaseAPI("TEST-KEY", "2.2", "BUKKIT", this, this, new BaseUpdater() {
 			@Override
 			public void update() {
 				System.out.println("uma tentativa de update foi realizada.");
 			}
 		});
+
 		if (api.initialize() == ConnectionStatus.OK){
 			System.out.println("yay-");
+			System.out.println(api.getStoreName());
+			System.out.println(api.getStatus());
 			api.loadPendingCommands();
 		} else {
 			
 		}
-		
 	}
 	
 	public static void main(String[] args){

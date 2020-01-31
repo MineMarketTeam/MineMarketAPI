@@ -15,9 +15,9 @@ public class BungeeBaseScheduler implements BaseTaskScheduler{
 	private final TaskScheduler ts;
 	private Set<ScheduledTask> tasks;
 	
-	// Esta classe é uma implementação de scheduler para a versão BungeeCord
-	// O task scheduler do BungeeCord não possui execução de tarefas sincronizadas...
-	// então, usamos uma tarefa async (fora do Thread principal) em qualquer caso..
+	// Esta classe ï¿½ uma implementaï¿½ï¿½o de scheduler para a versï¿½o BungeeCord
+	// O task scheduler do BungeeCord nï¿½o possui execuï¿½ï¿½o de tarefas sincronizadas...
+	// entï¿½o, usamos uma tarefa async (fora do Thread principal) em qualquer caso..
 	// TODO: Implementar tarefas em sincronia.
 	
 	public BungeeBaseScheduler(){

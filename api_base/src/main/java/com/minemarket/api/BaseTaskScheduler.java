@@ -3,59 +3,65 @@ package com.minemarket.api;
 import java.util.HashMap;
 
 /**
- * <p>Esta interface é responsável em lidar com o agendamento e a repetição contínua de tarefas.</p>
+ * <p>Esta interface ï¿½ responsï¿½vel em lidar com o agendamento e a repetiï¿½ï¿½o contï¿½nua de tarefas.</p>
  * <p>Esta interface foi baseada em um TaskScheduler implementado no projeto Bukkit.</p>
- * <p><b>Nota: </b>O tempo das operações realizadas serão sempre ser em <b>segundos</b>.
+ * <p><b>Nota: </b>O tempo das operaï¿½ï¿½es realizadas serï¿½o sempre ser em <b>segundos</b>.
  * <p><b>Nota: </b>A interface deve lidar com o registro e <b>cancelamento</b> de tarefas, para isso deve conter um {@link HashMap} contendo todas as tarefas sendo executadas.</p>
  */
 public interface BaseTaskScheduler {
 
-	/**
-	 * Executa uma tarefa fora do Thread principal.
-	 * @param task Tarefa a ser executada.
-	 */
-	public abstract void runTaskAsynchronously(Runnable task);
+    /**
+     * Executa uma tarefa fora do Thread principal.
+     *
+     * @param task Tarefa a ser executada.
+     */
+    void runTaskAsynchronously(Runnable task);
 
-	/**
-	 * Executa uma tarefa dentro do Thread principal da aplicação.
-	 * @param task Tarefa a ser executada.
-	 */
-	public abstract void runTaskSynchronously(Runnable task);
-	
-	/**
-	 * Programa uma tarefa para ser executada fora do Thread principal depois de um certo período de tempo.
-	 * @param task Tarefa a ser executada
-	 * @param delay Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
-	 */
-	public abstract void scheduleAsyncDelayedTask(Runnable task, int delay);
-	
-	/**
-	 * Programa uma tarefa para ser executada periodicamente fora do Thread principal, após um delay inicial.
-	 * @param task Tarefa a ser executada
-	 * @param delay Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
-	 * @param repeatIn Tempo em <b>segundos</b> que haverá entre cada execução.
-	 */
-	public abstract void scheduleAsyncRepeatingTask(Runnable task, int delay, int repeatIn);
-	
-	/**
-	 * Programa uma tarefa para ser executada dentro do Thread principal depois de um certo período de tempo.
-	 * @param task Tarefa a ser executada
-	 * @param delay Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
-	 */
-	public abstract void scheduleSyncDelayedTask(Runnable task, int delay);
-	
-	/**
-	 * Programa uma tarefa para ser executada periodicamente dentro do Thread principal, após um delay inicial.
-	 * @param task Tarefa a ser executada
-	 * @param delay Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
-	 * @param repeatIn Tempo em <b>segundos</b> que haverá entre cada execução.
-	 */
-	public abstract void scheduleSyncRepeatingTask(Runnable task, int delay, int repeatIn);
-	
-	/**
-	 * Esta função deve cancelar todas as tarefas que foram instanciadas dentro da interface, 
-	 * para que não haja uso excessivo de memória ou tarefas pendentes mesmo após a finalização de execução da instancia da API.
-	 */
-	public abstract void cancelTasks();
-	
+    /**
+     * Executa uma tarefa dentro do Thread principal da aplicaï¿½ï¿½o.
+     *
+     * @param task Tarefa a ser executada.
+     */
+    void runTaskSynchronously(Runnable task);
+
+    /**
+     * Programa uma tarefa para ser executada fora do Thread principal depois de um certo perï¿½odo de tempo.
+     *
+     * @param task  Tarefa a ser executada
+     * @param delay Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
+     */
+    void scheduleAsyncDelayedTask(Runnable task, int delay);
+
+    /**
+     * Programa uma tarefa para ser executada periodicamente fora do Thread principal, apï¿½s um delay inicial.
+     *
+     * @param task     Tarefa a ser executada
+     * @param delay    Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
+     * @param repeatIn Tempo em <b>segundos</b> que haverï¿½ entre cada execuï¿½ï¿½o.
+     */
+    void scheduleAsyncRepeatingTask(Runnable task, int delay, int repeatIn);
+
+    /**
+     * Programa uma tarefa para ser executada dentro do Thread principal depois de um certo perï¿½odo de tempo.
+     *
+     * @param task  Tarefa a ser executada
+     * @param delay Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
+     */
+    void scheduleSyncDelayedTask(Runnable task, int delay);
+
+    /**
+     * Programa uma tarefa para ser executada periodicamente dentro do Thread principal, apï¿½s um delay inicial.
+     *
+     * @param task     Tarefa a ser executada
+     * @param delay    Tempo em <b>segundos</b> que se deve esperar antes de realizar a tarefa.
+     * @param repeatIn Tempo em <b>segundos</b> que haverï¿½ entre cada execuï¿½ï¿½o.
+     */
+    void scheduleSyncRepeatingTask(Runnable task, int delay, int repeatIn);
+
+    /**
+     * Esta funï¿½ï¿½o deve cancelar todas as tarefas que foram instanciadas dentro da interface,
+     * para que nï¿½o haja uso excessivo de memï¿½ria ou tarefas pendentes mesmo apï¿½s a finalizaï¿½ï¿½o de execuï¿½ï¿½o da instancia da API.
+     */
+    void cancelTasks();
+
 }
