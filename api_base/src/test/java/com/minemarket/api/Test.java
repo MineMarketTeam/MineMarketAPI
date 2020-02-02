@@ -43,13 +43,13 @@ public class Test implements BaseCommandExecutor, BaseTaskScheduler{
 
 	@Override
 	public boolean executeCommand(PendingCommand command) {
-		//System.out.println(command.getCommandLine().replaceAll("%nick%", command.getPlayerName()));
+		System.out.println(command.getCommandLine().replaceAll("%nick%", command.getPlayerName()));
 			
 		return false;
 	}
 	
 	public void testar(){
-		MineMarketBaseAPI api = new MineMarketBaseAPI("TEST-KEY", "2.2", "BUKKIT", this, this, new BaseUpdater() {
+		MineMarketBaseAPI api = new MineMarketBaseAPI("yJqn1UhoeaykXzvjXwx8J2ljgh7X4tdsdy6", "2.2", "BUKKIT", this, this, new BaseUpdater() {
 			@Override
 			public void update() {
 				System.out.println("uma tentativa de update foi realizada.");
